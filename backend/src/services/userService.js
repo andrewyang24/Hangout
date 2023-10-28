@@ -18,9 +18,28 @@ class UserService {
     }
     AuthService.users[requester].outgoing.push(targetUser);
     AuthService.users[targetUser].incoming.push(requester);
+    return
+  }
+
+  static deleteOutgoing(requester, targetUser) {
+    AuthService.users[requester].outgoing.delete(targetUser);
     return AuthService.user[requester]
   }
 
+  static acceptIncoming(requester, targetUser) {
+    AuthService.users[requester].incoming.delete(targetUser);
+    AuthService.users[requester].active.push(targetUser);
+    AuthService.users[targetUser].outgoing.delete(requester);
+    AuthService.users[targetUser].active.push(requester);
+    return
+  }
+
+  static rejectIncoming(requester, targetUser) {
+    AuthService.users[requester].incoming.delete(targetUser);
+    AuthService.users[targetUser].outgoing.delete(requester);
+    return AuthService.user[requester]
+  }
+  
 }
 
 module.exports = UserService;
