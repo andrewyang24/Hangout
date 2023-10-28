@@ -16,6 +16,10 @@ class UserService {
     if (incomingRequests.includes(targetUser)) {
       throw new Error("Target user is already in incoming requests")
     }
+    const outgoingRequests = AuthService.users[requester].outgoing;
+    if (outgoingRequests.includes(targetUser)) {
+      throw new Error("Already requested to hangout")
+    }
     AuthService.users[requester].outgoing.push(targetUser);
     AuthService.users[targetUser].incoming.push(requester);
     return
@@ -28,7 +32,7 @@ class UserService {
   }
 
   static acceptIncoming(requester, targetUser) {
-    const newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
+    let newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
     AuthService.users[requester].incoming = newArray;
     AuthService.users[requester].active.push(targetUser);
     newArray = AuthService.users[targetUser].outgoing.filter((element) => element !== requester);
@@ -38,7 +42,7 @@ class UserService {
   }
 
   static rejectIncoming(requester, targetUser) {
-    const newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
+    let newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
     AuthService.users[requester].incoming = newArray;
     newArray = AuthService.users[targetUser].outgoing.filter((element) => element !== requester);
     AuthService.users[targetUser].outgoing = newArray;
