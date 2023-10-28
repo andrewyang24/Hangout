@@ -18,7 +18,11 @@ class UserService {
     }
     const outgoingRequests = AuthService.users[requester].outgoing;
     if (outgoingRequests.includes(targetUser)) {
-      throw new Error("Already requested to hangout")
+      throw new Error("Already requested to hang out")
+    }
+    const activeRequests = AuthService.users[requester].active;
+    if (activeRequests.includes(targetUser)) {
+      throw new Error("Already agreed to hang out")
     }
     AuthService.users[requester].outgoing.push(targetUser);
     AuthService.users[targetUser].incoming.push(requester);
