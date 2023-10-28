@@ -3,8 +3,10 @@ const AuthService = require('../services/authService.js'); // Replace with the c
 // Test registration
 async function testRegistration() {
   try {
-    const newUser = await AuthService.register('testuser', 'testpassword');
+    const newUser = await AuthService.register('testuser', 'testpassword', "testfirst", "testlast");
     console.log('Registration successful:', newUser);
+    console.log(AuthService.credentials)
+    console.log(AuthService.users)
   } catch (error) {
     console.error('Registration failed:', error.message);
   }

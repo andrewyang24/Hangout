@@ -1,44 +1,36 @@
-const bcrypt = require('bcrypt');
-
-// Sample in-memory user storage
-const credentials = {};
-let currUser;
-
 class AuthService {
-  static async register(username, password) {
+  static credentials = {};
+  static users = {};
+  static currUser;
+
+  static async register(username, password, firstname, lastname) {
     // Check if the username is already taken
-    if (username in credentials) {
+    if (username in AuthService.credentials) {
       throw new Error('Username is already taken');
     }
 
-    // Hash the password before storing it
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     // Add the user to the in-memory storage
-    credentials[username] = hashedPassword;
+    AuthService.credentials[username] = password;
+    AuthService.users[username] = { first: firstname, last: lastname, active: [], outgoing: [], incoming: [], points: 0 };
 
     return username;
   }
 
   static async login(username, password) {
-    if (!(username in credentials)) {
-        throw new Error('User not found');
+    if (!(username in AuthService.credentials)) {
+      throw new Error('User not found');
     }
 
     // Find the user with the given username
-    const pw = credentials[username];
+    const pw = AuthService.credentials[username];
 
-    // Compare the provided password with the hashed password
-    const passwordMatch = await bcrypt.compare(password, pw);
-
-    if (!passwordMatch) {
+    if (!(pw === password)) {
       throw new Error('Invalid password');
     }
 
-    currUser = username;
+    AuthService.currUser = username;
     return username;
   }
 }
-
 
 module.exports = AuthService;
