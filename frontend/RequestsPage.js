@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 
-const Page1 = () => {
+const RequestsPage = () => {
   const [pendingInvites, setPendingInvitations] = useState([
     { id: 1, username: 'User1' },
     { id: 2, username: 'User2' },
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   section: {
-    flex: 1, // Each section takes up half the screen
-    marginBottom: 20, // Add margin between sections
+    flex: 1, 
+    marginBottom: 20, 
   },
   sectionTitle: {
     fontSize: 18,
@@ -120,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Page1;
+export default RequestsPage;

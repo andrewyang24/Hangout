@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
 
-const Page2 = () => {
+const InvitePage = () => {
   const [username, setUsername] = useState('');
 
   const handleUsernameChange = (text) => {
@@ -59,5 +59,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Page2;
+export default InvitePage;
 

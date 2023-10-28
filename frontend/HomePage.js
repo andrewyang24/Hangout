@@ -1,4 +1,3 @@
-// HomePage.js
 import React from 'react';
 import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
 
@@ -78,8 +77,6 @@ const styles = StyleSheet.create({
     phone: {
         fontSize: 18,
     },
-
-  });
+});
   
-
 export default HomePage;
