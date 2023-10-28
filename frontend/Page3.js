@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   username: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   profilePictureContainer: {
