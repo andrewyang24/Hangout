@@ -24,21 +24,25 @@ class UserService {
   static deleteOutgoing(requester, targetUser) {
     const newArray = AuthService.users[requester].outgoing.filter((element) => element !== targetUser);
     AuthService.users[requester].outgoing = newArray;
-    return AuthService.user[requester]
+    return
   }
 
   static acceptIncoming(requester, targetUser) {
-    AuthService.users[requester].incoming.delete(targetUser);
+    const newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
+    AuthService.users[requester].incoming = newArray;
     AuthService.users[requester].active.push(targetUser);
-    AuthService.users[targetUser].outgoing.delete(requester);
+    newArray = AuthService.users[targetUser].outgoing.filter((element) => element !== requester);
+    AuthService.users[targetUser].outgoing = newArray;
     AuthService.users[targetUser].active.push(requester);
     return
   }
 
   static rejectIncoming(requester, targetUser) {
-    AuthService.users[requester].incoming.delete(targetUser);
-    AuthService.users[targetUser].outgoing.delete(requester);
-    return AuthService.user[requester]
+    const newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
+    AuthService.users[requester].incoming = newArray;
+    newArray = AuthService.users[targetUser].outgoing.filter((element) => element !== requester);
+    AuthService.users[targetUser].outgoing = newArray;
+    return
   }
 
 }
