@@ -22,7 +22,8 @@ class UserService {
   }
 
   static deleteOutgoing(requester, targetUser) {
-    AuthService.users[requester].outgoing.delete(targetUser);
+    const newArray = AuthService.users[requester].outgoing.filter((element) => element !== targetUser);
+    AuthService.users[requester].outgoing = newArray;
     return AuthService.user[requester]
   }
 
@@ -39,7 +40,7 @@ class UserService {
     AuthService.users[targetUser].outgoing.delete(requester);
     return AuthService.user[requester]
   }
-  
+
 }
 
 module.exports = UserService;
