@@ -1,4 +1,3 @@
-// Page2.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 
@@ -10,22 +9,27 @@ const Page2 = () => {
     setUsername(text);
   };
 
-  const handleSubmit = () => {
-    // Add your logic for handling the username submission here
-    // You can use the 'username' state variable to access the entered username.
+  const handleSubmit = (user) => {
+    if (user === '') {
+      alert('Invalid Username');
+      return
+    }
+    //backend search username exists
+    alert('Invitation Sent');
+    setUsername('');
   };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <Text style={styles.title}>Add an invite</Text>
+        <Text style={styles.title}>Invite a friend to meet up</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter Username"
           value={username}
           onChangeText={handleUsernameChange}
         />
-        <Button title="Send Invite" onPress={handleSubmit} />
+        <Button title="Send Invite" onPress={() => handleSubmit(username)} />
       </View>
     </TouchableWithoutFeedback>
   );
@@ -41,6 +45,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     marginBottom: 20,
+    fontWeight: 'bold',
+    
   },
   input: {
     width: '80%',
@@ -49,6 +55,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+    fontSize: 18,
   },
 });
 
