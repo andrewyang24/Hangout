@@ -10,6 +10,7 @@ class AuthService {
     }
 
     // Add the user to the in-memory storage
+    AuthService.currUser = username;
     AuthService.credentials[username] = password;
     AuthService.users[username] = { first: firstname, last: lastname, active: [], outgoing: [], incoming: [], points: 0, phone: phonenumber };
 

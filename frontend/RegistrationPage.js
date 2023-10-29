@@ -10,12 +10,33 @@ const RegistrationPage = (props) => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('')
 
-  const handleRegisterClick = () => {
-    if (firstName && lastName && username && phoneNumber && password) {
-      props.updateLoginStatus(true);
-      navigation.navigate('Login'); 
-    } else {
-      alert('Please fill out all fields');
+  const handleRegisterClick = async () => {
+    try {
+      const response = await fetch('http://10.20.20.24:3000/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          first: firstName,
+          last: lastName,
+          phone: phoneNumber, // Include the phone number in the request
+        }),
+      });
+
+      if (response.ok) {
+        // Registration successful, you may want to handle this in a more appropriate way
+        props.updateLoginStatus(true);
+        navigation.navigate('Home');
+      } else {
+        // Registration failed, handle error
+        alert('Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert('An error occurred during registration');
     }
   };
 

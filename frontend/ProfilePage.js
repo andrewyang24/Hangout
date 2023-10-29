@@ -3,17 +3,26 @@ import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     // Replace 'your-server-url' with the actual URL of your server
     const serverUrl = 'http://10.20.20.24:3000'; // Update with your server address
-    const username = 'ayang24'; // Replace with the desired username
 
-    // Fetch user data
-    fetch(`${serverUrl}/api/users/${username}`)
+    // Fetch current user data
+    fetch(`${serverUrl}/api/auth/curr`)
       .then((response) => response.json())
-      .then((data) => setUserData(data))
-      .catch((error) => console.error('Error fetching user data:', error));
+      .then((data) => {
+        // Now data contains the current username
+        setUsername(data.username);
+
+        // Fetch user data based on the obtained username
+        fetch(`${serverUrl}/api/users/${data.username}`)
+          .then((response) => response.json())
+          .then((userData) => setUserData(userData))
+          .catch((error) => console.error('Error fetching user data:', error));
+      })
+      .catch((error) => console.error('Error fetching current user data:', error));
   }, []);
 
   if (!userData) {
@@ -23,7 +32,7 @@ const ProfilePage = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Text style={styles.username}>Username: ayang24</Text>
+        <Text style={styles.username}>Username: {username}</Text>
         <View style={styles.profilePictureContainer}>
           <Image
             source={{ uri: userData.profilePicture }} // Replace with the actual user's profile picture URL
