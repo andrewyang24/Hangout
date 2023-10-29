@@ -7,18 +7,32 @@ const LoginPage = (props) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLoginClick = () => {
-    // Add your login logic here
-    if (username === 'Test' && password === 'test') {
-      // Successful login, navigate to the home screen
-      props.updateLoginStatus(true);
-      navigation.navigate('Login');
-    } else {
-      // Invalid credentials, show an error message
-      alert('Invalid username or password');
+  const handleLoginClick = async () => {
+    try {
+      const response = await fetch('http://10.0.0.2:3000/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
+
+      if (response.ok) {
+        // Successful login, navigate to the home screen
+        props.updateLoginStatus(true);
+        navigation.navigate('Home'); // Update with the name of your home screen
+      } else {
+        // Invalid credentials, show an error message
+        alert('Invalid username or password');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('An error occurred during login');
     }
   };
-
   const handleRegisterClick = () => {
     navigation.navigate('Register'); // Navigate to the registration screen
   };
