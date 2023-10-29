@@ -8,16 +8,14 @@ const RegistrationPage = (props) => {
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [password, setPassword] = useState('')
 
   const handleRegisterClick = () => {
-    // Implement registration logic here
-    if (firstName && lastName && username && phoneNumber) {
-      // Registration successful
-      // You can send the registration data to your server here
+    if (firstName && lastName && username && phoneNumber && password) {
       props.updateLoginStatus(true);
-      navigation.navigate('Login'); // Navigate to the main app screen on successful registration
+      navigation.navigate('Login'); 
     } else {
-      alert('Please fill out all fields'); // Show an error message if any field is empty
+      alert('Please fill out all fields');
     }
   };
 
@@ -39,15 +37,21 @@ const RegistrationPage = (props) => {
         />
         <TextInput
           style={styles.input}
+          placeholder="Enter Phone Number"
+          value={phoneNumber}
+          onChangeText={setPhoneNumber}
+        />
+          <TextInput
+          style={styles.input}
           placeholder="Enter Username"
           value={username}
           onChangeText={setUsername}
         />
-        <TextInput
+          <TextInput
           style={styles.input}
-          placeholder="Enter Phone Number"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
+          placeholder="Enter Password"
+          value={username}
+          onChangeText={setPassword}
         />
         <Button title="Register" onPress={handleRegisterClick} />
       </View>

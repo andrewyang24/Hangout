@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 user = {
-  firstName: "Hua",
-  lastName: "Jiang",
+  firstName: "John",
+  lastName: "Doe",
   score: 2,
 }
 

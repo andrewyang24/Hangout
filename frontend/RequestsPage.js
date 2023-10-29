@@ -3,23 +3,15 @@ import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 
 const RequestsPage = () => {
   const [pendingInvites, setPendingInvitations] = useState([
-    { id: 1, username: 'User1' },
-    { id: 2, username: 'User2' },
-    { id: 3, username: 'User3' },
-    { id: 4, username: 'User4' },
-    { id: 5, username: 'User5' },
-    { id: 6, username: 'User6' },
+    { id: 1, username: 'huahua' },
+    { id: 2, username: 'wemmajia' },
+    { id: 3, username: 'maxp06' },
+    { id: 4, username: 'andrewyang24' },
   ]);
 
   const [sentInvites, setSentInvitations] = useState([
-    { id: 10, username: 'User10' },
-    { id: 11, username: 'User11' },
-    { id: 12, username: 'User12' },
-    { id: 13, username: 'User13' },
-    { id: 14, username: 'User14' },
-    { id: 15, username: 'User15' },
-    { id: 16, username: 'User16' },
-    { id: 17, username: 'User17' },
+    { id: 10, username: 'kimchaewon' },
+    { id: 11, username: 'hongeunchae' },
   ]);
 
   const handleAccept = (invitationId) => {
