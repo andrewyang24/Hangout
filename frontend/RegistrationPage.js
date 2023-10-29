@@ -50,7 +50,7 @@ const RegistrationPage = (props) => {
           <TextInput
           style={styles.input}
           placeholder="Enter Password"
-          value={username}
+          value={password}
           onChangeText={setPassword}
         />
         <Button title="Register" onPress={handleRegisterClick} />
