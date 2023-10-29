@@ -6,7 +6,7 @@ dummy = [
   { id: 2, username: 'friend1', phone: '123-456-7890'},
   { id: 3, username: 'friend2', phone: '123-123-1234'},
   { id: 4, username: 'friend3', phone: '123-111-2222'},
-  { id: 5, username: 'friend4', phone: '13-122-2222'},
+  { id: 5, username: 'friend4', phone: '133-122-2222'},
 ]
 
 function handleToday(userName) {
