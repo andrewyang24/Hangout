@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
 
 dummy = [
-  { id: 1, username: 'nobody', phone: '336-508-1030'},
+  { id: 1, username: 'nobody', phone: '336-509-1000'},
   { id: 2, username: 'friend1', phone: '123-456-7890'},
   { id: 3, username: 'friend2', phone: '123-123-1234'},
   { id: 4, username: 'friend3', phone: '123-111-2222'},
