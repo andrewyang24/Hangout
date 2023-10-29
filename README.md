@@ -17,7 +17,7 @@ node app.js <br>
 
 ##
 <p align="center">
-<img src="https://github.com/wemmajia/FriendshipApp/assets/69730095/2264b579-ec0d-4cfe-b608-66cc5b347d91" width="250">
+<img src="https://github.com/wemmajia/FriendshipApp/assets/69730095/19c07e5f-58e1-4195-ae52-9f412a7d9d69" width="250">
 <img src="https://github.com/wemmajia/FriendshipApp/assets/69730095/ca54f336-d6b5-4275-a4ae-e908e5527043" width="250">
 <img src="https://github.com/wemmajia/FriendshipApp/assets/69730095/8aac31ad-3975-4598-baa4-786c542d5ef8" width="250">
 <img src="https://github.com/wemmajia/FriendshipApp/assets/69730095/16898036-a097-4c7d-9a40-734bb9315bf8" width="250">
