@@ -1,29 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const [username, setUsername] = useState(null);
 
-  useEffect(() => {
-    // Replace 'your-server-url' with the actual URL of your server
-    const serverUrl = 'http://10.20.20.24:3000'; // Update with your server address
+  const fetchData = async () => {
+    try {
+      // Replace 'your-server-url' with the actual URL of your server
+      const serverUrl = 'http://10.20.20.24:3000'; // Update with your server address
 
-    // Fetch current user data
-    fetch(`${serverUrl}/api/auth/curr`)
-      .then((response) => response.json())
-      .then((data) => {
-        // Now data contains the current username
-        setUsername(data.username);
+      // Fetch current user data
+      const responseCurr = await fetch(`${serverUrl}/api/auth/curr`);
+      const dataCurr = await responseCurr.json();
 
-        // Fetch user data based on the obtained username
-        fetch(`${serverUrl}/api/users/${data.username}`)
-          .then((response) => response.json())
-          .then((userData) => setUserData(userData))
-          .catch((error) => console.error('Error fetching user data:', error));
-      })
-      .catch((error) => console.error('Error fetching current user data:', error));
-  }, []);
+      // Now data contains the current username
+      setUsername(dataCurr.username);
+
+      // Fetch user data based on the obtained username
+      const responseUser = await fetch(`${serverUrl}/api/users/${dataCurr.username}`);
+      const userData = await responseUser.json();
+      setUserData(userData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  // Use useFocusEffect to execute fetchData when the screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   if (!userData) {
     return <Text>Loading...</Text>;
