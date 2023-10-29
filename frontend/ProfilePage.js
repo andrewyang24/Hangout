@@ -1,6 +1,12 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
+user = {
+  firstName: "Hua",
+  lastName: "Jiang",
+  score: 2,
+}
+
 const ProfilePage = () => {
   return (
     <View style={styles.container}>
@@ -15,8 +21,9 @@ const ProfilePage = () => {
             <Text>Edit Picture</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.name}>Firstname</Text>
-        <Text style={styles.name}>Lastname</Text>
+        <Text style={styles.userInfo}>{user.firstName}</Text>
+        <Text style={styles.userInfo}>{user.lastName}</Text>
+        <Text style={styles.userInfo}>Score: {user.score}</Text>
       </View>
       <TouchableOpacity style={styles.settingsButton}>
         <Text>Settings</Text>
@@ -51,7 +58,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
-  name: {
+  userInfo: {
     fontSize: 20,
     marginTop: 10,
   },

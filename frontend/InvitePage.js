@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
     fontWeight: 'bold',
-    
   },
   input: {
     width: '80%',
