@@ -76,4 +76,4 @@ class UserService {
 module.exports = UserService;
 
 
-// {ayang: {first: "andrew", last: "Yang", active: [], outgoing: [], incoming: [], points: 0}, user2.....}
+// {ayang: {first: "andrew", last: "Yang", active: [], outgoing: [], incoming: [], points: 0, phone: 0}, user2.....}

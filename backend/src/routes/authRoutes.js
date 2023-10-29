@@ -24,4 +24,14 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
+router.get('/curr', async (req, res, next) => {
+  try {
+    const loggedInUser = AuthService.currUser;
+    res.json({ username: loggedInUser });
+  } catch (error) {
+    next(error);
+  }
+});
+
+
 module.exports = router;
