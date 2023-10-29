@@ -11,7 +11,7 @@ const ProfilePage = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Text style={styles.username}>Username</Text>
+        <Text style={styles.username}>@johndoe</Text>
         <View style={styles.profilePictureContainer}>
           <Image
             source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png' }} // Use the actual URL or require the image source
