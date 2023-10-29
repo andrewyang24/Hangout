@@ -3,7 +3,7 @@ class AuthService {
   static users = {};
   static currUser;
 
-  static async register(username, password, firstname, lastname) {
+  static async register(username, password, firstname, lastname, phonenumber) {
     // Check if the username is already taken
     if (username in AuthService.credentials) {
       throw new Error('Username is already taken');
@@ -11,7 +11,7 @@ class AuthService {
 
     // Add the user to the in-memory storage
     AuthService.credentials[username] = password;
-    AuthService.users[username] = { first: firstname, last: lastname, active: [], outgoing: [], incoming: [], points: 0 };
+    AuthService.users[username] = { first: firstname, last: lastname, active: [], outgoing: [], incoming: [], points: 0, phone: phonenumber };
 
     return username;
   }
