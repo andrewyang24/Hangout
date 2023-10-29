@@ -1,29 +1,41 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
-user = {
-  firstName: "Hua",
-  lastName: "Jiang",
-  score: 2,
-}
-
 const ProfilePage = () => {
+  const [userData, setUserData] = useState(null);
+
+  useEffect(() => {
+    // Replace 'your-server-url' with the actual URL of your server
+    const serverUrl = 'http://10.20.20.24:3000'; // Update with your server address
+    const username = 'ayang24'; // Replace with the desired username
+
+    // Fetch user data
+    fetch(`${serverUrl}/api/users/${username}`)
+      .then((response) => response.json())
+      .then((data) => setUserData(data))
+      .catch((error) => console.error('Error fetching user data:', error));
+  }, []);
+
+  if (!userData) {
+    return <Text>Loading...</Text>;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Text style={styles.username}>Username</Text>
+        <Text style={styles.username}>Username: ayang24</Text>
         <View style={styles.profilePictureContainer}>
           <Image
-            source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Windows_10_Default_Profile_Picture.svg/2048px-Windows_10_Default_Profile_Picture.svg.png' }} // Use the actual URL or require the image source
+            source={{ uri: userData.profilePicture }} // Replace with the actual user's profile picture URL
             style={styles.profilePicture}
           />
           <TouchableOpacity style={styles.editPictureButton}>
             <Text>Edit Picture</Text>
           </TouchableOpacity>
         </View>
-        <Text style={styles.userInfo}>{user.firstName}</Text>
-        <Text style={styles.userInfo}>{user.lastName}</Text>
-        <Text style={styles.userInfo}>Score: {user.score}</Text>
+        <Text style={styles.userInfo}>First Name: {userData.first}</Text>
+        <Text style={styles.userInfo}>Last Name: {userData.last}</Text>
+        <Text style={styles.userInfo}>Score: {userData.points}</Text>
       </View>
       <TouchableOpacity style={styles.settingsButton}>
         <Text>Settings</Text>
