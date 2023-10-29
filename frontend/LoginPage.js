@@ -35,7 +35,7 @@ const LoginPage = (props) => {
     }
   };
   const handleRegisterClick = () => {
-    navigation.navigate('Register'); // Navigate to the registration screen
+    navigation.navigate('Register');
   };
 
   return (

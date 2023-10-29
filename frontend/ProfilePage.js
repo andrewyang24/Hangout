@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   profilePicture: {
     width: 150,
     height: 150,
-    borderRadius: 50, // To make it a circle
+    borderRadius: 50,
   },
   editPictureButton: {
     marginTop: 10,

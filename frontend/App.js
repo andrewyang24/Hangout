@@ -9,7 +9,6 @@ import ProfilePage from './ProfilePage';
 import LoginPage from './LoginPage';
 import RegistrationPage from './RegistrationPage';
 const Tab = createBottomTabNavigator();
-// const login = false;
 
 const updateLoginStatus = (newLoginStatus) => {
   setLogin(newLoginStatus);
@@ -20,7 +19,6 @@ const App = () => {
   return (
     <NavigationContainer>
       {login ? (
-        // Render the tab navigation when the user is logged in
         <Tab.Navigator
           screenOptions={({ route }) => ({
             tabBarIcon: ({ focused, color, size }) => {
