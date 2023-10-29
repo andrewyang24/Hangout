@@ -8,7 +8,7 @@ const LoginPage = (props) => {
   const [password, setPassword] = useState('');
 
   const handleLoginClick = () => {
-    if (username === 'Test' && password === 'test') {
+    if (username === 'johndoe' && password === 'password') {
       props.updateLoginStatus(true);
       navigation.navigate('Login');
     } else {
