@@ -32,8 +32,8 @@ class UserService {
   static deleteOutgoing(requester, targetUser) {
     let newArray = AuthService.users[requester].outgoing.filter((element) => element !== targetUser);
     AuthService.users[requester].outgoing = newArray;
-    newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
-    AuthService.users[requester].incoming = newArray;
+    newArray = AuthService.users[targetUser].incoming.filter((element) => element !== requester);
+    AuthService.users[targetUser].incoming = newArray;
     return
   }
 
