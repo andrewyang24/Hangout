@@ -9,15 +9,43 @@ const InvitePage = () => {
     setUsername(text);
   };
 
-  const handleSubmit = (user) => {
+  const handleSubmit = async (user) => {
     if (user === '') {
       alert('Invalid Username');
-      return
+      return;
     }
-    //backend search username exists
-    alert('Invitation Sent');
-    setUsername('');
+  
+    try {
+      // Step 1: Call the /curr endpoint to get the current user
+      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
+      const currUserData = await currUserResponse.json();
+      const currUser = currUserData.username;
+  
+      // Step 2: Use the obtained current user to make a request to the /hangout endpoint
+      const hangoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/hangout`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          targetUser: user,
+        }),
+      });
+  
+      if (hangoutResponse.ok) {
+        // Hangout request sent successfully
+        alert('Invitation Sent');
+        setUsername('');
+      } else {
+        // Handle the case when the hangout request fails
+        alert('Failed to send invitation. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error during hangout request:', error);
+      alert('An error occurred during the hangout request');
+    }
   };
+  
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
