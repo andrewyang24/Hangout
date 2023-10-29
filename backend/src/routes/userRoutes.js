@@ -38,6 +38,19 @@ router.put('/:username/rescind', (req, res) => {
   }
 });
 
+router.put('/:username/acceptincoming', (req, res) => {
+  try {
+    const requester = req.params.username;
+    const targetUser = req.body.targetUser;
+
+    UserService.acceptIncoming(requester, targetUser);
+
+    res.status(200).json({message: "Incoming hangout request accepted"});
+  } catch (error) {
+    res.status(500).json({error: error.message});
+  }
+});
+
 router.put('/:username/rejectincoming', (req, res) => {
   try {
     const requester = req.params.username;
@@ -51,14 +64,27 @@ router.put('/:username/rejectincoming', (req, res) => {
   }
 });
 
-router.put('/:username/acceptincoming', (req, res) => {
+router.put('/:username/dip', (req, res) => {
   try {
     const requester = req.params.username;
     const targetUser = req.body.targetUser;
 
-    UserService.acceptIncoming(requester, targetUser);
+    UserService.hangoutNever(requester, targetUser);
 
-    res.status(200).json({message: "Incoming hangout request accepted"});
+    res.status(200).json({message: "You dipped your hangout"});
+  } catch (error) {
+    res.status(500).json({error: error.message});
+  }
+});
+
+router.put('/:username/hungout', (req, res) => {
+  try {
+    const requester = req.params.username;
+    const targetUser = req.body.targetUser;
+
+    UserService.hungout(requester, targetUser);
+
+    res.status(200).json({message: "You have both been awarded 1 point for successfully hanging out"});
   } catch (error) {
     res.status(500).json({error: error.message});
   }

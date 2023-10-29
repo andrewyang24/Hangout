@@ -53,6 +53,24 @@ class UserService {
     return
   }
 
+  static hangoutNever(requester, targetUser) {
+    let newArray = AuthService.users[requester].active.filter((element) => element !== targetUser);
+    AuthService.users[requester].active = newArray;
+    newArray = AuthService.users[targetUser].active.filter((element) => element !== requester);
+    AuthService.users[targetUser].active = newArray;
+    return
+  }
+
+  static hungout(requester, targetUser) {
+    AuthService.users[requester].points += 1
+    AuthService.users[targetUser].points += 1
+    let newArray = AuthService.users[requester].active.filter((element) => element !== targetUser);
+    AuthService.users[requester].active = newArray;
+    newArray = AuthService.users[targetUser].active.filter((element) => element !== requester);
+    AuthService.users[targetUser].active = newArray;
+    return
+  }
+
 }
 
 module.exports = UserService;
