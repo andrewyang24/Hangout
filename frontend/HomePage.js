@@ -7,16 +7,13 @@ const HomePage = () => {
 
   const fetchData = async () => {
     try {
-      // Step 1: Call the /curr endpoint to get the current user
       const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
       const currUserData = await currUserResponse.json();
       const currUser = currUserData.username;
   
-      // Step 2: Use the obtained current user to make a request to the /users/:username endpoint
       const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}`);
       const currentUserData = await currentUserResponse.json();
   
-      // Update the state with the active field data
       const activeInvites = await Promise.all(currentUserData.active.map(async (username, index) => {
         const userResponse = await fetch(`http://10.20.20.24:3000/api/users/${username}`);
         const userData = await userResponse.json();
@@ -24,9 +21,9 @@ const HomePage = () => {
         return {
           id: index + 1,
           username,
-          firstName: userData.first || '',  // Use first name from the user's endpoint, if available
-          lastName: userData.last || '',    // Use last name from the user's endpoint, if available
-          phone: userData.phone || '',          // Use phone data from the user's endpoint, if available
+          firstName: userData.first || '',
+          lastName: userData.last || '',
+          phone: userData.phone || '',
         };
       }));
   
@@ -35,8 +32,6 @@ const HomePage = () => {
       console.error('Error fetching current user data:', error);
     }
   };
-  
-  
 
   useFocusEffect(
     React.useCallback(() => {
@@ -69,11 +64,9 @@ const HomePage = () => {
       });
 
       if (hungoutResponse.ok) {
-        // Hungout request successful
         alert(`You have hungout with ${userName} and earned a friendship point!`);
         fetchData(); // Refresh the data after making changes
       } else {
-        // Handle the case when the hungout request fails
         console.error('Failed to mark as hungout. Please try again.');
       }
     } catch (error) {
@@ -98,11 +91,9 @@ const HomePage = () => {
       });
 
       if (dipResponse.ok) {
-        // Dip request successful
         alert(`You have declined the invitation from ${userName} and will not be notified again. :(`);
-        fetchData(); // Refresh the data after making changes
+        fetchData();
       } else {
-        // Handle the case when the dip request fails
         console.error('Failed to dip hangout. Please try again.');
       }
     } catch (error) {

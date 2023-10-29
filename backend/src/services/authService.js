@@ -22,7 +22,6 @@ class AuthService {
       throw new Error('User not found');
     }
 
-    // Find the user with the given username
     const pw = AuthService.credentials[username];
 
     if (!(pw === password)) {

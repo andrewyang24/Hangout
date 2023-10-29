@@ -8,16 +8,13 @@ const RequestsPage = () => {
 
   const fetchData = async () => {
     try {
-      // Step 1: Call the /curr endpoint to get the current user
       const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
       const currUserData = await currUserResponse.json();
       const currUser = currUserData.username;
 
-      // Step 2: Use the obtained current user to make a request to the /users/:username endpoint
       const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}`);
       const currentUserData = await currentUserResponse.json();
 
-      // Update the state with incoming and outgoing fields
       setPendingInvitations(currentUserData.incoming.map((username, index) => ({ id: index + 1, username })));
       setSentInvitations(currentUserData.outgoing.map((username, index) => ({ id: index + 10, username })));
     } catch (error) {
@@ -25,7 +22,6 @@ const RequestsPage = () => {
     }
   };
 
-  // Use useFocusEffect to execute fetchData when the screen comes into focus
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
@@ -56,11 +52,9 @@ const RequestsPage = () => {
       });
 
       if (acceptResponse.ok) {
-        // Accept request successful
         const updatedInvitations = pendingInvites.filter((invitation) => invitation.id !== invitationId);
         setPendingInvitations(updatedInvitations);
       } else {
-        // Handle the case when the accept request fails
         console.error('Failed to accept invitation. Please try again.');
       }
     } catch (error) {
@@ -92,11 +86,9 @@ const RequestsPage = () => {
       });
 
       if (rejectResponse.ok) {
-        // Reject request successful
         const updatedInvitations = pendingInvites.filter((invitation) => invitation.id !== invitationId);
         setPendingInvitations(updatedInvitations);
       } else {
-        // Handle the case when the reject request fails
         console.error('Failed to reject invitation. Please try again.');
       }
     } catch (error) {

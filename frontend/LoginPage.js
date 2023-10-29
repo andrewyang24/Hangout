@@ -22,11 +22,9 @@ const LoginPage = (props) => {
 
 
       if (response.ok) {
-        // Successful login, navigate to the home screen
         props.updateLoginStatus(true);
-        navigation.navigate('Home'); // Update with the name of your home screen
+        navigation.navigate('Home');
       } else {
-        // Invalid credentials, show an error message
         alert('Invalid username or password');
       }
     } catch (error) {

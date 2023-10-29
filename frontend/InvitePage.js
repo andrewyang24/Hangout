@@ -16,12 +16,10 @@ const InvitePage = () => {
     }
   
     try {
-      // Step 1: Call the /curr endpoint to get the current user
       const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
       const currUserData = await currUserResponse.json();
       const currUser = currUserData.username;
   
-      // Step 2: Use the obtained current user to make a request to the /hangout endpoint
       const hangoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/hangout`, {
         method: 'POST',
         headers: {
@@ -33,11 +31,9 @@ const InvitePage = () => {
       });
   
       if (hangoutResponse.ok) {
-        // Hangout request sent successfully
         alert('Invitation Sent');
         setUsername('');
       } else {
-        // Handle the case when the hangout request fails
         alert('Failed to send invitation. Please try again.');
       }
     } catch (error) {

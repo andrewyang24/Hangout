@@ -22,16 +22,14 @@ const RegistrationPage = (props) => {
           password,
           first: firstName,
           last: lastName,
-          phone: phoneNumber, // Include the phone number in the request
+          phone: phoneNumber,
         }),
       });
 
       if (response.ok) {
-        // Registration successful, you may want to handle this in a more appropriate way
         props.updateLoginStatus(true);
         navigation.navigate('Home');
       } else {
-        // Registration failed, handle error
         alert('Registration failed. Please try again.');
       }
     } catch (error) {

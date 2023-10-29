@@ -8,17 +8,13 @@ const ProfilePage = () => {
 
   const fetchData = async () => {
     try {
-      // Replace 'your-server-url' with the actual URL of your server
       const serverUrl = 'http://10.20.20.24:3000'; // Update with your server address
 
-      // Fetch current user data
       const responseCurr = await fetch(`${serverUrl}/api/auth/curr`);
       const dataCurr = await responseCurr.json();
 
-      // Now data contains the current username
       setUsername(dataCurr.username);
 
-      // Fetch user data based on the obtained username
       const responseUser = await fetch(`${serverUrl}/api/users/${dataCurr.username}`);
       const userData = await responseUser.json();
       setUserData(userData);
@@ -27,7 +23,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Use useFocusEffect to execute fetchData when the screen comes into focus
   useFocusEffect(
     React.useCallback(() => {
       fetchData();
