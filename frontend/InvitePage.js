@@ -1,32 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import AuthContext from './AuthContext';
 
 
 const InvitePage = () => {
+  const { user } = useContext(AuthContext);
   const [username, setUsername] = useState('');
 
   const handleUsernameChange = (text) => {
     setUsername(text);
   };
 
-  const handleSubmit = async (user) => {
-    if (user === '') {
+  const handleSubmit = async () => {
+    if (username === '') {
       alert('Invalid Username');
       return;
     }
   
     try {
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-  
-      const hangoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/hangout`, {
+      const hangoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/hangout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          targetUser: user,
+          targetUser: username,
         }),
       });
   

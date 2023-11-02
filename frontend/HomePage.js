@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import AuthContext from './AuthContext';
 
 const HomePage = () => {
+  const { user } = useContext(AuthContext);
   const [activeInvites, setActiveInvites] = useState([]);
 
   const fetchData = async () => {
     try {
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-  
-      const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}`);
+      const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}`);
       const currentUserData = await currentUserResponse.json();
   
       const activeInvites = await Promise.all(currentUserData.active.map(async (username, index) => {
@@ -49,11 +47,7 @@ const HomePage = () => {
 
   const handleHungout = async (userName) => {
     try {
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-
-      const hungoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/hungout`, {
+      const hungoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/hungout`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -76,11 +70,7 @@ const HomePage = () => {
 
   const handleNever = async (userName) => {
     try {
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-
-      const dipResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/dip`, {
+      const dipResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/dip`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

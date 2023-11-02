@@ -1,18 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import AuthContext from './AuthContext';
 
 const RequestsPage = () => {
+  const { user } = useContext(AuthContext);
   const [pendingInvites, setPendingInvitations] = useState([]);
   const [sentInvites, setSentInvitations] = useState([]);
 
   const fetchData = async () => {
     try {
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-
-      const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}`);
+      const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}`);
       const currentUserData = await currentUserResponse.json();
 
       setPendingInvitations(currentUserData.incoming.map((username, index) => ({ id: index + 1, username })));
@@ -37,11 +35,7 @@ const RequestsPage = () => {
         return;
       }
 
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-
-      const acceptResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/acceptincoming`, {
+      const acceptResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/acceptincoming`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -71,11 +65,7 @@ const RequestsPage = () => {
         return;
       }
 
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-
-      const rejectResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/rejectincoming`, {
+      const rejectResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/rejectincoming`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -105,11 +95,7 @@ const RequestsPage = () => {
         return;
       }
 
-      const currUserResponse = await fetch('http://10.20.20.24:3000/api/auth/curr');
-      const currUserData = await currUserResponse.json();
-      const currUser = currUserData.username;
-
-      const rescindResponse = await fetch(`http://10.20.20.24:3000/api/users/${currUser}/rescind`, {
+      const rescindResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/rescind`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

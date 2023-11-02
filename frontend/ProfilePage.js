@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import AuthContext from './AuthContext';
 
 const ProfilePage = () => {
+  const { user } = useContext(AuthContext);
   const [userData, setUserData] = useState(null);
-  const [username, setUsername] = useState(null);
 
   const fetchData = async () => {
     try {
-      const serverUrl = 'http://10.20.20.24:3000'; // Update with your server address
+      const serverUrl = 'http://10.20.20.24:3000';
+      console.log(serverUrl)
 
-      const responseCurr = await fetch(`${serverUrl}/api/auth/curr`);
-      const dataCurr = await responseCurr.json();
-
-      setUsername(dataCurr.username);
-
-      const responseUser = await fetch(`${serverUrl}/api/users/${dataCurr.username}`);
+      const responseUser = await fetch(`${serverUrl}/api/users/${user.username}`);
       const userData = await responseUser.json();
       setUserData(userData);
     } catch (error) {
@@ -25,8 +22,10 @@ const ProfilePage = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      fetchData();
-    }, [])
+      if (user) {
+        fetchData();
+      }
+    }, [user])
   );
 
   if (!userData) {
@@ -36,7 +35,7 @@ const ProfilePage = () => {
   return (
     <View style={styles.container}>
       <View style={styles.topSection}>
-        <Text style={styles.username}>Username: {username}</Text>
+        <Text style={styles.username}>Username: {user.username}</Text>
         <View style={styles.profilePictureContainer}>
           <Image
             source={{ uri: userData.profilePicture }} // Replace with the actual user's profile picture URL

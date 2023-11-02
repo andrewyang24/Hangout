@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AuthContext from './AuthContext';
 
 const RegistrationPage = (props) => {
   const navigation = useNavigation();
+  const { login } = useContext(AuthContext);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
@@ -27,6 +29,7 @@ const RegistrationPage = (props) => {
       });
 
       if (response.ok) {
+        login({ username });
         props.updateLoginStatus(true);
         navigation.navigate('Home');
       } else {
