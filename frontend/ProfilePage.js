@@ -10,8 +10,6 @@ const ProfilePage = () => {
   const fetchData = async () => {
     try {
       const serverUrl = 'http://10.20.20.24:3000';
-      console.log(serverUrl)
-
       const responseUser = await fetch(`${serverUrl}/api/users/${user.username}`);
       const userData = await responseUser.json();
       setUserData(userData);

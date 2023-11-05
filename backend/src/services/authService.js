@@ -12,7 +12,15 @@ class AuthService {
     // Add the user to the in-memory storage
     AuthService.currUser = username;
     AuthService.credentials[username] = password;
-    AuthService.users[username] = { first: firstname, last: lastname, active: [], outgoing: [], incoming: [], points: 0, phone: phonenumber };
+    AuthService.users[username] = { 
+      first: firstname, 
+      last: lastname, 
+      active: [], 
+      outgoing: [], 
+      incoming: [], 
+      points: 0, 
+      phone: phonenumber
+    };
 
     return username;
   }
@@ -30,6 +38,14 @@ class AuthService {
 
     AuthService.currUser = username;
     return username;
+  }
+
+  static async updatePushToken(username, pushToken) {
+    if (AuthService.users[username]) {
+      AuthService.users[username].pushToken = pushToken;
+    } else {
+      throw new Error('User not found');
+    }
   }
 }
 

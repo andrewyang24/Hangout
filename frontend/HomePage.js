@@ -37,13 +37,63 @@ const HomePage = () => {
     }, [])
   );
 
-  function handleToday(userName) {
-    alert(`You have accepted the invitation from ${userName} for today!`);
+
+  function handleTomorrow(userName, userPhone) {
+    const messageBody = `Hey ${userName}, ${user.username} is not available to meet up today. Maybe tomorrow!`;
+  
+    // Make a request to your backend to send an SMS
+    fetch('http://10.20.20.24:3000/api/users/send-sms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: userPhone,
+        body: messageBody,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(`You have notified ${userName} that you're not available today!`);
+        } else {
+          alert('Failed to send SMS. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error sending SMS:', error);
+        alert('An error occurred while sending SMS.');
+      });
   }
 
-  function handleTomorrow(userName) {
-    alert(`You plan to meet up with ${userName} for tomorrow. Don't flake!`);
+  function handleToday(userName, userPhone) {
+    const messageBody = `Hey ${userName}, ${user.username} is available to meet up today!`;
+  
+    // Make a request to your backend to send an SMS
+    fetch('http://10.20.20.24:3000/api/users/send-sms', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        to: userPhone,
+        body: messageBody,
+      }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(`You have notified ${userName} that you're available today!`);
+        } else {
+          alert('Failed to send SMS. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error sending SMS:', error);
+        alert('An error occurred while sending SMS.');
+      });
   }
+  
 
   const handleHungout = async (userName) => {
     try {
@@ -97,8 +147,8 @@ const HomePage = () => {
       <Text style={styles.phone}>{item.phone}</Text>
       <View style={styles.buttonContainer}>
         <Button title='Hungout' onPress={() => handleHungout(item.username)} />
-        <Button title='Today!' onPress={() => handleToday(`${item.firstName} ${item.lastName}`)} />
-        <Button title='Tomorrow?' onPress={() => handleTomorrow(`${item.firstName} ${item.lastName}`)} />
+        <Button title='Today!' onPress={() => handleToday(item.username, item.phone)} />
+        <Button title='Tomorrow?' onPress={() => handleTomorrow(item.username, item.phone)} />
         <Button title='Never' onPress={() => handleNever(item.username)} />
       </View>
     </View>
