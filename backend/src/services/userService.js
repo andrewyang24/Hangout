@@ -1,79 +1,163 @@
-const AuthService = require('../services/authService.js');
+const db = require('./firebaseInit');
+const { FieldValue } = require('firebase-admin').firestore;
 
 class UserService {
 
-  static getUserInfo(currUser) {
-    return AuthService.users[currUser];
-  }
-
-  static createHangout(requester, targetUser) {
-    if (!(targetUser in AuthService.users)) {
-      throw new Error("User not found")
+  static async getUserInfo(currUser) {
+    try {
+      const userRef = db.collection('users').doc(currUser);
+      const doc = await userRef.get();
+      if (!doc.exists) {
+        throw new Error('User not found');
+      }
+      return doc.data();
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+      throw error;
     }
-    const incomingRequests = AuthService.users[requester].incoming;
-    if (incomingRequests.includes(targetUser)) {
-      throw new Error("Target user is already in incoming requests")
+  }
+
+  static async createHangout(requester, targetUser) {
+    try {
+      await db.runTransaction(async (transaction) => {
+        const requesterRef = db.collection('users').doc(requester);
+        const targetUserRef = db.collection('users').doc(targetUser);
+
+        const [requesterDoc, targetUserDoc] = await Promise.all([
+          transaction.get(requesterRef), 
+          transaction.get(targetUserRef)
+        ]);
+
+        if (!targetUserDoc.exists) {
+          throw new Error('Target user not found');
+        }
+
+        const requesterData = requesterDoc.data();
+        const targetUserData = targetUserDoc.data();
+
+        if (requesterData.incoming && requesterData.incoming.includes(targetUser)) {
+          throw new Error('Target user is already in incoming requests');
+        }
+
+        if (requesterData.outgoing && requesterData.outgoing.includes(targetUser)) {
+          throw new Error('Already requested to hang out');
+        }
+
+        if (requesterData.active && requesterData.active.includes(targetUser)) {
+          throw new Error('Already agreed to hang out');
+        }
+
+        transaction.update(requesterRef, { outgoing: FieldValue.arrayUnion(targetUser) });
+        transaction.update(targetUserRef, { incoming: FieldValue.arrayUnion(requester) });
+      });
+    } catch (error) {
+      console.error('Error creating hangout:', error);
+      throw error;
     }
-    const outgoingRequests = AuthService.users[requester].outgoing;
-    if (outgoingRequests.includes(targetUser)) {
-      throw new Error("Already requested to hang out")
+  }
+
+  static async deleteOutgoing(requester, targetUser) {
+    try {
+      const requesterRef = db.collection('users').doc(requester);
+      const targetUserRef = db.collection('users').doc(targetUser);
+
+      await db.runTransaction(async (transaction) => {
+        transaction.update(requesterRef, { outgoing: FieldValue.arrayRemove(targetUser) });
+        transaction.update(targetUserRef, { incoming: FieldValue.arrayRemove(requester) });
+      });
+    } catch (error) {
+      console.error('Error deleting outgoing request:', error);
+      throw error;
     }
-    const activeRequests = AuthService.users[requester].active;
-    if (activeRequests.includes(targetUser)) {
-      throw new Error("Already agreed to hang out")
+  }
+
+  static async acceptIncoming(requester, targetUser) {
+    try {
+      const requesterRef = db.collection('users').doc(requester);
+      const targetUserRef = db.collection('users').doc(targetUser);
+
+      await db.runTransaction(async (transaction) => {
+        transaction.update(requesterRef, {
+          incoming: FieldValue.arrayRemove(targetUser),
+          active: FieldValue.arrayUnion(targetUser)
+        });
+        transaction.update(targetUserRef, {
+          outgoing: FieldValue.arrayRemove(requester),
+          active: FieldValue.arrayUnion(requester)
+        });
+      });
+    } catch (error) {
+      console.error('Error accepting incoming request:', error);
+      throw error;
     }
-    AuthService.users[requester].outgoing.push(targetUser);
-    AuthService.users[targetUser].incoming.push(requester);
-    return
   }
 
-  static deleteOutgoing(requester, targetUser) {
-    let newArray = AuthService.users[requester].outgoing.filter((element) => element !== targetUser);
-    AuthService.users[requester].outgoing = newArray;
-    newArray = AuthService.users[targetUser].incoming.filter((element) => element !== requester);
-    AuthService.users[targetUser].incoming = newArray;
-    return
+  static async rejectIncoming(requester, targetUser) {
+    try {
+      const requesterRef = db.collection('users').doc(requester);
+      const targetUserRef = db.collection('users').doc(targetUser);
+
+      await db.runTransaction(async (transaction) => {
+        transaction.update(requesterRef, {
+          incoming: FieldValue.arrayRemove(targetUser)
+        });
+        transaction.update(targetUserRef, {
+          outgoing: FieldValue.arrayRemove(requester)
+        });
+      });
+    } catch (error) {
+      console.error('Error rejecting incoming request:', error);
+      throw error;
+    }
   }
 
-  static acceptIncoming(requester, targetUser) {
-    let newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
-    AuthService.users[requester].incoming = newArray;
-    AuthService.users[requester].active.push(targetUser);
-    newArray = AuthService.users[targetUser].outgoing.filter((element) => element !== requester);
-    AuthService.users[targetUser].outgoing = newArray;
-    AuthService.users[targetUser].active.push(requester);
-    return
+  static async hangoutNever(requester, targetUser) {
+    try {
+      const requesterRef = db.collection('users').doc(requester);
+      const targetUserRef = db.collection('users').doc(targetUser);
+
+      await db.runTransaction(async (transaction) => {
+        transaction.update(requesterRef, {
+          active: FieldValue.arrayRemove(targetUser)
+        });
+        transaction.update(targetUserRef, {
+          active: FieldValue.arrayRemove(requester)
+        });
+      });
+    } catch (error) {
+      console.error('Error removing hangout:', error);
+      throw error;
+    }
   }
 
-  static rejectIncoming(requester, targetUser) {
-    let newArray = AuthService.users[requester].incoming.filter((element) => element !== targetUser);
-    AuthService.users[requester].incoming = newArray;
-    newArray = AuthService.users[targetUser].outgoing.filter((element) => element !== requester);
-    AuthService.users[targetUser].outgoing = newArray;
-    return
-  }
+  static async hungout(requester, targetUser) {
+    try {
+      const requesterRef = db.collection('users').doc(requester);
+      const targetUserRef = db.collection('users').doc(targetUser);
 
-  static hangoutNever(requester, targetUser) {
-    let newArray = AuthService.users[requester].active.filter((element) => element !== targetUser);
-    AuthService.users[requester].active = newArray;
-    newArray = AuthService.users[targetUser].active.filter((element) => element !== requester);
-    AuthService.users[targetUser].active = newArray;
-    return
-  }
+      await db.runTransaction(async (transaction) => {
+        const [requesterDoc, targetUserDoc] = await Promise.all([
+          transaction.get(requesterRef), 
+          transaction.get(targetUserRef)
+        ]);
 
-  static hungout(requester, targetUser) {
-    AuthService.users[requester].points += 1
-    AuthService.users[targetUser].points += 1
-    let newArray = AuthService.users[requester].active.filter((element) => element !== targetUser);
-    AuthService.users[requester].active = newArray;
-    newArray = AuthService.users[targetUser].active.filter((element) => element !== requester);
-    AuthService.users[targetUser].active = newArray;
-    return
-  }
+        const requesterData = requesterDoc.data();
+        const targetUserData = targetUserDoc.data();
 
+        transaction.update(requesterRef, {
+          points: requesterData.points + 1,
+          active: FieldValue.arrayRemove(targetUser)
+        });
+        transaction.update(targetUserRef, {
+          points: targetUserData.points + 1,
+          active: FieldValue.arrayRemove(requester)
+        });
+      });
+    } catch (error) {
+      console.error('Error processing hangout:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = UserService;
-
-
-// {ayang: {first: "andrew", last: "Yang", active: [], outgoing: [], incoming: [], points: 0, phone: 0}, user2.....}

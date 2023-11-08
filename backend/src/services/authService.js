@@ -1,18 +1,24 @@
+const bcrypt = require('bcrypt');
+const db = require('./firebaseInit');
+
+const saltRounds = 10;
+
 class AuthService {
-  static credentials = {};
-  static users = {};
-  static currUser;
 
   static async register(username, password, firstname, lastname, phonenumber) {
-    // Check if the username is already taken
-    if (username in AuthService.credentials) {
+    const usersRef = db.collection('users');
+    const userDoc = await usersRef.doc(username).get();
+
+    if (userDoc.exists) {
       throw new Error('Username is already taken');
     }
 
-    // Add the user to the in-memory storage
-    AuthService.currUser = username;
-    AuthService.credentials[username] = password;
-    AuthService.users[username] = { 
+    // Hash the password before storing it
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Add the user to Firestore
+    await usersRef.doc(username).set({
+      password: hashedPassword,
       first: firstname, 
       last: lastname, 
       active: [], 
@@ -20,32 +26,38 @@ class AuthService {
       incoming: [], 
       points: 0, 
       phone: phonenumber
-    };
+    });
 
     return username;
   }
 
   static async login(username, password) {
-    if (!(username in AuthService.credentials)) {
+    const userDoc = await db.collection('users').doc(username).get();
+
+    if (!userDoc.exists) {
       throw new Error('User not found');
     }
 
-    const pw = AuthService.credentials[username];
+    const user = userDoc.data();
+    // Compare the password with the hashed password stored in Firestore
+    const isValid = await bcrypt.compare(password, user.password);
 
-    if (!(pw === password)) {
+    if (!isValid) {
       throw new Error('Invalid password');
     }
-
-    AuthService.currUser = username;
+    
     return username;
   }
 
   static async updatePushToken(username, pushToken) {
-    if (AuthService.users[username]) {
-      AuthService.users[username].pushToken = pushToken;
-    } else {
+    const userDoc = db.collection('users').doc(username);
+
+    const userSnapshot = await userDoc.get();
+    if (!userSnapshot.exists) {
       throw new Error('User not found');
     }
+
+    await userDoc.update({ pushToken });
   }
 }
 
