@@ -40,42 +40,51 @@ const RegistrationPage = (props) => {
       alert('An error occurred during registration');
     }
   };
+  const handleLoginClick = () => {
+    navigation.navigate('Login');
+  };
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        <Text style={styles.title}>Register for MyApp!</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Enter First Name"
-          value={firstName}
-          onChangeText={setFirstName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Last Name"
-          value={lastName}
-          onChangeText={setLastName}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Enter Phone Number"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-        />
+        <View style={styles.registerContainer}>
+          <Text style={styles.title}>Register for Hangout!</Text>
           <TextInput
-          style={styles.input}
-          placeholder="Enter Username"
-          value={username}
-          onChangeText={setUsername}
-        />
+            style={styles.input}
+            placeholder="Enter First Name"
+            value={firstName}
+            onChangeText={setFirstName}
+          />
           <TextInput
-          style={styles.input}
-          placeholder="Enter Password"
-          value={password}
-          onChangeText={setPassword}
-        />
-        <Button title="Register" onPress={handleRegisterClick} />
+            style={styles.input}
+            placeholder="Enter Last Name"
+            value={lastName}
+            onChangeText={setLastName}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter Phone Number"
+            value={phoneNumber}
+            onChangeText={setPhoneNumber}
+          />
+            <TextInput
+            style={styles.input}
+            placeholder="Enter Username"
+            value={username}
+            onChangeText={setUsername}
+          />
+            <TextInput
+            style={styles.input}
+            placeholder="Enter Password"
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Button title="Register" onPress={handleRegisterClick} />
+        </View>
+        <View style={styles.loginContainer}>
+          <Text>Already have an account?</Text>
+          <Button title="Log In." onPress={handleLoginClick} />
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -84,8 +93,6 @@ const RegistrationPage = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   input: {
     width: '80%',
@@ -99,6 +106,17 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginBottom: 20,
     fontWeight: 'bold',
+  },
+  registerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  loginContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 50,
   },
 });
 

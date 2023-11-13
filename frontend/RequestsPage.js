@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, FlatList, Button, StyleSheet } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import AuthContext from './AuthContext';
+import Constants from 'expo-constants';
 
 const RequestsPage = () => {
   const { user } = useContext(AuthContext);
@@ -10,7 +11,8 @@ const RequestsPage = () => {
 
   const fetchData = async () => {
     try {
-      const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}`);
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const currentUserResponse = await fetch(`${serverUrl}/api/users/${user.username}`);
       const currentUserData = await currentUserResponse.json();
 
       setPendingInvitations(currentUserData.incoming.map((username, index) => ({ id: index + 1, username })));
@@ -35,7 +37,8 @@ const RequestsPage = () => {
         return;
       }
 
-      const acceptResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/acceptincoming`, {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const acceptResponse = await fetch(`${serverUrl}/api/users/${user.username}/acceptincoming`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -65,7 +68,8 @@ const RequestsPage = () => {
         return;
       }
 
-      const rejectResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/rejectincoming`, {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const rejectResponse = await fetch(`${serverUrl}/api/users/${user.username}/rejectincoming`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +99,8 @@ const RequestsPage = () => {
         return;
       }
 
-      const rescindResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/rescind`, {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const rescindResponse = await fetch(`${serverUrl}/api/users/${user.username}/rescind`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

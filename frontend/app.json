@@ -11,6 +11,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "extra": {
+      "serverUrl": "http://10.20.20.24:3000"
+    },
     "assetBundlePatterns": [
       "**/*"
     ],

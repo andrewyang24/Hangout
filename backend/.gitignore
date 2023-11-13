@@ -1,3 +1,6 @@
 node_modules
 .env
 firebase-admin.json
+functions
+.firebaserc
+firebase.json

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, FontAwesome } from '@expo/vector-icons'
@@ -9,6 +9,7 @@ import ProfilePage from './ProfilePage';
 import LoginPage from './LoginPage';
 import RegistrationPage from './RegistrationPage';
 import AuthProvider from './AuthProvider';
+import SplashScreen from './SplashScreen';
 const Tab = createBottomTabNavigator();
 
 const updateLoginStatus = (newLoginStatus) => {
@@ -17,6 +18,17 @@ const updateLoginStatus = (newLoginStatus) => {
 
 const App = () => {
   const [login, setLogin] = useState(false);
+  const [isSplashScreen, setIsSplashScreen] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSplashScreen(false);
+    }, 1000);
+  }, []);
+
+  if (isSplashScreen) {
+    return <SplashScreen />;
+  }
   return (
     <NavigationContainer>
       <AuthProvider>
@@ -47,7 +59,9 @@ const App = () => {
             <Tab.Screen name="Home" component={HomePage} />
             <Tab.Screen name="Requests" component={RequestsPage} />
             <Tab.Screen name="Invite" component={InvitePage} />
-            <Tab.Screen name="Profile" component={ProfilePage} />
+            <Tab.Screen name="Profile">
+              {() => <ProfilePage updateLoginStatus={setLogin} />}
+            </Tab.Screen>
           </Tab.Navigator>
         ) : (
           <Tab.Navigator

@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import AuthContext from './AuthContext';
-
+import Constants from 'expo-constants';
 
 const InvitePage = () => {
   const { user } = useContext(AuthContext);
@@ -18,7 +18,8 @@ const InvitePage = () => {
     }
   
     try {
-      const hangoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/hangout`, {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const hangoutResponse = await fetch(`${serverUrl}/api/users/${user.username}/hangout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

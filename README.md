@@ -15,6 +15,18 @@ npx expo start <br>
 cd backend <br>
 node app.js <br>
 
+## Deployment
+Ensure Firebase CLI is installed: npm install -g firebase-tools<br>
+cd backend <br>
+firebase emulators:start <br>
+testing locally: firebase serve --only functions <br>
+deployment: firebase deploy --only functions
+
+## Function URL
+https://us-central1-hangout-f5f70.cloudfunctions.net/api
+
+
+
 ##
 <p align="center">
 <img src="https://github.com/wemmajia/FriendshipApp/assets/69730095/b61f156b-8dae-4799-a9b7-85625b39467f" width="250">

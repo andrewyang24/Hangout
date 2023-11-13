@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Button, StyleSheet, FlatList } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import AuthContext from './AuthContext';
+import Constants from 'expo-constants';
+
 
 const HomePage = () => {
   const { user } = useContext(AuthContext);
@@ -9,11 +11,12 @@ const HomePage = () => {
 
   const fetchData = async () => {
     try {
-      const currentUserResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}`);
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const currentUserResponse = await fetch(`${serverUrl}/api/users/${user.username}`);
       const currentUserData = await currentUserResponse.json();
   
       const activeInvites = await Promise.all(currentUserData.active.map(async (username, index) => {
-        const userResponse = await fetch(`http://10.20.20.24:3000/api/users/${username}`);
+        const userResponse = await fetch(`${serverUrl}/api/users/${username}`);
         const userData = await userResponse.json();
   
         return {
@@ -40,9 +43,9 @@ const HomePage = () => {
 
   function handleTomorrow(userName, userPhone) {
     const messageBody = `Hey ${userName}, ${user.username} is not available to meet up today. Maybe tomorrow!`;
-  
+    const serverUrl = Constants.expoConfig.extra.serverUrl;
     // Make a request to your backend to send an SMS
-    fetch('http://10.20.20.24:3000/api/users/send-sms', {
+    fetch(`${serverUrl}/api/users/send-sms'`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -68,9 +71,9 @@ const HomePage = () => {
 
   function handleToday(userName, userPhone) {
     const messageBody = `Hey ${userName}, ${user.username} is available to meet up today!`;
-  
+    const serverUrl = Constants.expoConfig.extra.serverUrl;
     // Make a request to your backend to send an SMS
-    fetch('http://10.20.20.24:3000/api/users/send-sms', {
+    fetch(`${serverUrl}/api/users/send-sms'`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -97,7 +100,8 @@ const HomePage = () => {
 
   const handleHungout = async (userName) => {
     try {
-      const hungoutResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/hungout`, {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const hungoutResponse = await fetch(`${serverUrl}/api/users/${user.username}/hungout`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +124,8 @@ const HomePage = () => {
 
   const handleNever = async (userName) => {
     try {
-      const dipResponse = await fetch(`http://10.20.20.24:3000/api/users/${user.username}/dip`, {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const dipResponse = await fetch(`${serverUrl}/api/users/${user.username}/dip`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

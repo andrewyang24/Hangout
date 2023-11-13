@@ -1,15 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import AuthContext from './AuthContext';
+import defaultProfilePic from './assets/default-pfp.png';
+import Constants from 'expo-constants';
 
-const ProfilePage = () => {
-  const { user } = useContext(AuthContext);
+const ProfilePage = (props) => {
+  const { user, logout } = useContext(AuthContext);
+  const navigation = useNavigation();
   const [userData, setUserData] = useState(null);
 
   const fetchData = async () => {
     try {
-      const serverUrl = 'http://10.20.20.24:3000';
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
       const responseUser = await fetch(`${serverUrl}/api/users/${user.username}`);
       const userData = await responseUser.json();
       setUserData(userData);
@@ -20,12 +23,18 @@ const ProfilePage = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      if (user) {
-        fetchData();
-      }
+      fetchData();
     }, [user])
   );
 
+  const handleLogout = () => {
+    logout();
+    props.updateLoginStatus(false);
+  };
+
+  const profilePictureUri = userData && userData.profilePicture ? { uri: userData.profilePicture } : defaultProfilePic;
+
+  // If userData is null, render a loading text or a spinner
   if (!userData) {
     return <Text>Loading...</Text>;
   }
@@ -36,7 +45,7 @@ const ProfilePage = () => {
         <Text style={styles.username}>Username: {user.username}</Text>
         <View style={styles.profilePictureContainer}>
           <Image
-            source={{ uri: userData.profilePicture }} // Replace with the actual user's profile picture URL
+            source={profilePictureUri}
             style={styles.profilePicture}
           />
           <TouchableOpacity style={styles.editPictureButton}>
@@ -47,8 +56,8 @@ const ProfilePage = () => {
         <Text style={styles.userInfo}>Last Name: {userData.last}</Text>
         <Text style={styles.userInfo}>Score: {userData.points}</Text>
       </View>
-      <TouchableOpacity style={styles.settingsButton}>
-        <Text>Settings</Text>
+      <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+        <Text>Logout</Text>
       </TouchableOpacity>
     </View>
   );
@@ -84,10 +93,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
   },
-  settingsButton: {
+  logoutButton: {
     alignItems: 'center',
     padding: 10,
     backgroundColor: 'lightgray',
+    marginBottom: 10,
   },
 });
 

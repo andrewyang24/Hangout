@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from './AuthContext';
+import Constants from 'expo-constants';
 
 const LoginPage = (props) => {
   const navigation = useNavigation();
@@ -11,7 +12,8 @@ const LoginPage = (props) => {
 
   const handleLoginClick = async () => {
     try {
-      const response = await fetch('http://10.20.20.24:3000/api/auth/login', {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const response = await fetch(`${serverUrl}/api/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +28,6 @@ const LoginPage = (props) => {
       if (response.ok) {
         login({ username });
         props.updateLoginStatus(true);
-        navigation.navigate('Home');
       } else {
         alert('Invalid username or password');
       }
@@ -43,7 +44,7 @@ const LoginPage = (props) => {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View style={styles.loginContainer}>
-          <Text style={styles.title}>Welcome to MyApp!</Text>
+          <Text style={styles.title}>Welcome to Hangout!</Text>
           <TextInput
             style={styles.input}
             placeholder="Enter Username"
