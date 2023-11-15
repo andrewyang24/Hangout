@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { View, Text, Button, TextInput, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AuthContext from './AuthContext';
+import Constants from 'expo-constants';
 
 const RegistrationPage = (props) => {
   const navigation = useNavigation();
@@ -14,7 +15,8 @@ const RegistrationPage = (props) => {
 
   const handleRegisterClick = async () => {
     try {
-      const response = await fetch('http://10.20.20.24:3000/api/auth/register', {
+      const serverUrl = Constants.expoConfig.extra.serverUrl;
+      const response = await fetch(`${serverUrl}/api/auth/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
